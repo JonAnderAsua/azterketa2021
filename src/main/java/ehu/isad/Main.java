@@ -1,40 +1,35 @@
 package ehu.isad;
 
-import ehu.isad.controllers.ui.ProbaController;
+import ehu.isad.controllers.ui.MainKud;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class Main extends Application {
 
   private Parent root;
   private Stage stage;
+  private MainKud mainKud;
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    loadUI(primaryStage);
-    stageSetup();
+    stage = primaryStage;
+    pantailakKargatu();
+
+    stage.setTitle("Azterketa");
+    stage.setScene(new Scene(root,741,561));
     stage.show();
   }
 
-  private void loadUI(Stage primaryStage) throws IOException {
-    stage = primaryStage;
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/proba.fxml"));
-    ProbaController mainController = ProbaController.getInstance();
-    loader.setController(mainController);
+  private void pantailakKargatu() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml"));
     root = loader.load();
-  }
-
-  private void stageSetup(){
-    stage.setScene(new Scene(root));
-    stage.setTitle("Azterketa");
-    stage.getIcons().add(new Image(Main.class.getResourceAsStream("/icon.png")));
-    stage.setResizable(false);
+    mainKud = loader.getController();
   }
 
 

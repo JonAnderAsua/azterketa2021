@@ -1,0 +1,65 @@
+//irudia kargatzeko
+irudiaTable.setCellFactory(p -> new TableCell<>() {
+            public void updateItem(Image image, boolean empty) {
+                if (image != null && !empty){
+                    final ImageView imageview = new ImageView();
+                    imageview.setImage(image);
+                    setGraphic(imageview);
+                    setAlignment(Pos.CENTER);
+                }else{
+                    setGraphic(null);
+                    setText(null);
+                }
+            };
+        });
+
+//Guardar una imagen con nombre aleatorio
+File file = File.createTempFile("captcha", ".png", new File(Utils.getProperties().getProperty("pathToImages")));
+            BufferedImage img = ImageIO.read(new URL("http://45.32.169.98/captcha.php"));
+            ImageIO.write(img, "png", file);
+
+//checkbox
+vegetariancolumn.setCellValueFactory(new PropertyValueFactory<>("vegetarian"));
+        vegetariancolumn.setEditable(true);
+        vegetariancolumn.setCellFactory(p -> {
+            CheckBoxTableCell<KirolariaModel, Boolean> cell = new CheckBoxTableCell<KirolariaModel, Boolean>();
+            cell.setAlignment(Pos.CENTER);
+            return cell;
+        });
+
+           vegetariancolumn.setCellValueFactory(new Callback<>() {
+
+               @Override
+               public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<KirolariaModel, Boolean> param) {
+                   KirolariaModel person = param.getValue();
+                   SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(person.isVegetarian());
+                   // When "active?" column change.
+                   booleanProp.addListener(new ChangeListener<Boolean>() {
+                       @Override
+                       public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,                                                                               Boolean newValue) {
+                           person.setVegetarian(newValue);
+                       }
+                   });
+                   return booleanProp;
+               }
+        });
+
+
+//Errenkadak hartu
+        Lista<?>=taula.getSelectionModel().getSelectedItems();
+        Element<?>=taula.getSelectionModel().getSelectedItem();
+
+//Irudia kargatu
+private Image irudiaKargatu(String izena){
+        String imagePath = Utils.getProperties().getProperty("pathToImages")+izena+".png";
+        Image image = null;
+        try {
+            image=new Image(new FileInputStream(imagePath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+
+
