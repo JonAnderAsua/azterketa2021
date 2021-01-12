@@ -18,8 +18,6 @@ public class OrriKud {
 
 
     public String getBertsioa(String kodetuta) throws SQLException {
-        System.out.println("510f3fba339c091dbbb92df00ff3e706");
-        System.out.println(kodetuta);
         String eskaera = "SELECT version FROM checksums WHERE md5 LIKE '"+kodetuta+"'";
         ResultSet rs = dbcontroller.execSQL(eskaera);
         String emaitza = "";

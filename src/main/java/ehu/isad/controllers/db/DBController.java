@@ -9,8 +9,7 @@ public class DBController {
 
     Connection conn=null;
     private static final DBController controller = new DBController();
-    private final String pathToSQLiteDB = Utils.getProperties().getProperty("dbname"); //SQLite
-//    private final String nameOfMySQLDB = Utils.getProperties().getProperty("pathToDB"); //MySQL
+    private final String pathToSQLiteDB = Utils.getProperties().getProperty("dbname");
 
     private DBController() {
         this.conOpen();
@@ -22,11 +21,6 @@ public class DBController {
 
     private void conOpen() {
         try {
-            // MySQL
-//            Class.forName("com.mysql.cj.jdbc.Driver").getConstructor().newInstance();
-//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", Utils.getProperties());
-//            conn.setCatalog(nameOfMySQLDB);
-            // SQLite
             conn = DriverManager.getConnection("jdbc:sqlite:"+pathToSQLiteDB);
             System.out.println("Connection to SQLite has been established.");
         } catch (SQLException ex) {
@@ -34,9 +28,6 @@ public class DBController {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
-//        catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | InstantiationException | NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private void conClose() {
