@@ -1,5 +1,7 @@
 package ehu.isad.controllers.db;
 
+import ehu.isad.model.Orrialde;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,12 +18,19 @@ public class OrriKud {
 
 
     public String getBertsioa(String kodetuta) throws SQLException {
-        String eskaera = "SELECT version FROM checksums";
+        System.out.println("510f3fba339c091dbbb92df00ff3e706");
+        System.out.println(kodetuta);
+        String eskaera = "SELECT version FROM checksums WHERE md5 LIKE '"+kodetuta+"'";
         ResultSet rs = dbcontroller.execSQL(eskaera);
         String emaitza = "";
         if(rs.next()){
             emaitza = rs.getString("version");
         }
         return emaitza;
+    }
+
+    public void sartuDatuBasean(Orrialde o) {
+        String eskaera = "INSERT INTO checksums VALUES(1,'"+o.getVersion()+"','"+o.getMd5()+"',0)";
+        dbcontroller.execSQL(eskaera);
     }
 }

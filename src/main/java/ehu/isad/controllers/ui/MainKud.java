@@ -2,6 +2,7 @@ package ehu.isad.controllers.ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 public class MainKud {
 
@@ -56,18 +58,18 @@ public class MainKud {
     OrriKud ok = OrriKud.getInstance();
 
     @FXML
-    void checkClick(ActionEvent event) throws IOException, SQLException {
+    void checkClick(ActionEvent event) throws IOException, SQLException, NoSuchAlgorithmException {
         String url = textFieldId.getText();
-        String kodetuta = url+"/README";
-        kodetuta = utils.readFromUrl(url);
-        String bertsioa = ok.getBertsioa(kodetuta);
+        String md5 = url+"/README";
+        md5 = utils.readFromUrl(md5);
+        String bertsioa = ok.getBertsioa(md5);
         if(bertsioa.equals("")){
             labelId.setText("Ez dago datu basean");
         }
         else{
             labelId.setText("Datu basean dago");
         }
-        Orrialde o = new Orrialde(url,kodetuta,bertsioa);
+        Orrialde o = new Orrialde(url,md5,bertsioa);
         orrialdeList.add(o);
         kargatu();
     }
@@ -75,10 +77,23 @@ public class MainKud {
 
     @FXML
     void initialize() {
-        versionId.setEditable(true);
         urlId.setCellValueFactory(new PropertyValueFactory<>("url"));
         md5Id.setCellValueFactory(new PropertyValueFactory<>("md5"));
         versionId.setCellValueFactory(new PropertyValueFactory<>("version"));
+
+        versionId.setEditable(true);
+
+
+        versionId.setCellFactory(TextFieldTableCell.forTableColumn());
+        versionId.setOnEditCommit(data -> {
+
+            Orrialde o = new Orrialde(tableId.getSelectionModel().getSelectedItem().getUrl(),tableId.getSelectionModel().getSelectedItem().getMd5(),"");
+            String s = data.getNewValue();
+            o.setVersion(s);
+            if(labelId.equals("Ez dago datu basean")){ //Datu basean ez badago
+                ok.sartuDatuBasean(o);
+            }
+        });
 
 
         kargatu();
@@ -86,6 +101,7 @@ public class MainKud {
     }
 
     private void kargatu(){
+        obsLista.clear();
         obsLista.addAll(orrialdeList);
         tableId.setItems(obsLista);
     }
