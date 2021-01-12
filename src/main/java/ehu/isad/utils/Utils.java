@@ -30,13 +30,20 @@ public class Utils {
         return properties;
     }
 
-    public static String readFromUrl(String url) throws IOException {
-        URL api = new URL(url);
-        URLConnection yc = api.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-        String inputLine = in.readLine(); // raw data
-        in.close();
-        return getMD5(inputLine);
+    public static String readFromUrl(String url)  {
+        String emaitza = "";
+        try {
+            URL api = new URL(url);
+            URLConnection yc = api.openConnection();
+            BufferedReader in = null;
+            in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            String inputLine = in.readLine(); // raw data
+            in.close();
+            emaitza =  getMD5(inputLine);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return emaitza;
     }
     private static String getMD5(String input) {
         try {
